@@ -12,11 +12,13 @@ public class GameGrammar implements Grammar {
 
   private static final GameGrammar INSTANCE = new GameGrammar();
 
+  private final Dictionary dictionary = GameDictionary.getInstance();
+
   private GameGrammar() {}
 
   private Map<String, GameAction> actionMap = new HashMap<String, GameAction>();
 
-  public static GameGrammar getInstance() {
+  public static Grammar getInstance() {
     return INSTANCE;
   }
 
@@ -65,6 +67,12 @@ public class GameGrammar implements Grammar {
 
       actionMap.put(gameAction.getId(), gameAction);
 
+      /**
+       * Add game action to Dictionary
+       * */
+
+       dictionary.addGameAction(gameAction);
+
     } else {
       throw new IllegalArgumentException("can not add null game action");
     }
@@ -77,49 +85,9 @@ public class GameGrammar implements Grammar {
   }
 
 
-    private GameAction getGoGameAction()
-    {
-        /**
-         *  Go Action
-         * */
-        GameAction goAction = new GameAction("go");
-
-        goAction.addPattern("go {direction}");
-
-        return goAction;
-    }
-
-    private GameAction getExamineAction()
-    {
-        GameAction exAction = new GameAction("examine");
-        exAction.addPattern("examine {object}");
-        exAction.addPattern("x {object}");
-        exAction.addPattern("look at {object}");
-
-        return exAction;
-    }
-
-    private GameAction getTakeGameAction()
-    {
-
-        /**
-         *  Take Game Action
-         * */
-        GameAction takeAction = new GameAction("take");
-
-        takeAction.addPattern("take {object}");
-
-        return takeAction;
-    }
-
-    /**
-     *  Initialize Grammer with Go, Take, Examine actions
-     * */
-    public void init()
-    {
-        addGameAction(getGoGameAction());
-        addGameAction(getExamineAction());
-        addGameAction(getTakeGameAction());
-    }
+  @Override
+  public void clear(){
+    actionMap.clear();
+  }
 
 }
